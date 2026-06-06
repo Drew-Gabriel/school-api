@@ -5,9 +5,9 @@
     "description": "Students and Courses CRUD API",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "school-api.onrender.com",
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": ["https"],
   "paths": {
     "/students": {
       "get": {
