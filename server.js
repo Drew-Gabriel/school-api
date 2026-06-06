@@ -10,7 +10,7 @@ const app = express();
 
 app.use(express.json());
 
-// Swagger Documentation
+// Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
@@ -23,12 +23,12 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
+// ✅ START SERVER FIRST
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+// ✅ CONNECT DB AFTER
 initDb()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log("MongoDB Error:", err);
-  });
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log("MongoDB Error:", err));
