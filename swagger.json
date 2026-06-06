@@ -8,7 +8,9 @@
   "host": "school-api.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
+
   "paths": {
+
     "/students": {
       "get": {
         "summary": "Get all students",
@@ -18,8 +20,29 @@
           }
         }
       },
+
       "post": {
         "summary": "Create a student",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": { "type": "string" },
+                "lastName": { "type": "string" },
+                "email": { "type": "string" },
+                "age": { "type": "number" },
+                "course": { "type": "string" },
+                "level": { "type": "number" },
+                "phone": { "type": "string" }
+              }
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -27,7 +50,8 @@
         }
       }
     },
-    "/students/{id}": {
+
+    "/students/{id": {
       "get": {
         "summary": "Get one student",
         "parameters": [
@@ -44,14 +68,33 @@
           }
         }
       },
+
       "put": {
         "summary": "Update a student",
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": { "type": "string" },
+                "lastName": { "type": "string" },
+                "email": { "type": "string" },
+                "age": { "type": "number" },
+                "course": { "type": "string" },
+                "level": { "type": "number" },
+                "phone": { "type": "string" }
+              }
+            }
           }
         ],
         "responses": {
@@ -60,6 +103,7 @@
           }
         }
       },
+
       "delete": {
         "summary": "Delete a student",
         "parameters": [
@@ -77,6 +121,7 @@
         }
       }
     },
+
     "/courses": {
       "get": {
         "summary": "Get all courses",
@@ -86,8 +131,29 @@
           }
         }
       },
+
       "post": {
         "summary": "Create a course",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "courseName": { "type": "string" },
+                "courseCode": { "type": "string" },
+                "instructor": { "type": "string" },
+                "credits": { "type": "number" },
+                "semester": { "type": "string" },
+                "department": { "type": "string" },
+                "capacity": { "type": "number" }
+              }
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -95,6 +161,7 @@
         }
       }
     },
+
     "/courses/{id}": {
       "get": {
         "summary": "Get one course",
@@ -112,14 +179,33 @@
           }
         }
       },
+
       "put": {
         "summary": "Update a course",
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "courseName": { "type": "string" },
+                "courseCode": { "type": "string" },
+                "instructor": { "type": "string" },
+                "credits": { "type": "number" },
+                "semester": { "type": "string" },
+                "department": { "type": "string" },
+                "capacity": { "type": "number" }
+              }
+            }
           }
         ],
         "responses": {
@@ -128,6 +214,7 @@
           }
         }
       },
+
       "delete": {
         "summary": "Delete a course",
         "parameters": [
