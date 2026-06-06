@@ -1,6 +1,3 @@
-const dns = require("dns");
-dns.setServers(["8.8.8.8", "1.1.1.1"]);
-
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
@@ -23,12 +20,12 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-// ✅ START SERVER FIRST
+// ✅ START SERVER FIRST (CRITICAL)
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// ✅ CONNECT DB AFTER
+// ✅ THEN CONNECT DB (NON-BLOCKING)
 initDb()
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("MongoDB Error:", err));
