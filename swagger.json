@@ -2,22 +2,88 @@
   "swagger": "2.0",
   "info": {
     "title": "School API",
-    "description": "Students and Courses CRUD API",
+    "description": "Students and Courses CRUD API with Authentication",
     "version": "1.0.0"
   },
+
   "host": "school-api.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
 
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter token like: Bearer YOUR_TOKEN"
+    }
+  },
+
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+
   "paths": {
+
+    "/auth/register": {
+      "post": {
+        "summary": "Register user",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": { "type": "string" },
+                "password": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created"
+          }
+        }
+      }
+    },
+
+    "/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": { "type": "string" },
+                "password": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns JWT token"
+          }
+        }
+      }
+    },
 
     "/students": {
       "get": {
         "summary": "Get all students",
         "responses": {
-          "200": {
-            "description": "Success"
-          }
+          "200": { "description": "Success" }
         }
       },
 
@@ -44,9 +110,7 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          }
+          "201": { "description": "Created" }
         }
       }
     },
@@ -63,9 +127,7 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Success"
-          }
+          "200": { "description": "Success" }
         }
       },
 
@@ -98,9 +160,7 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Updated"
-          }
+          "200": { "description": "Updated" }
         }
       },
 
@@ -115,9 +175,7 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Deleted"
-          }
+          "200": { "description": "Deleted" }
         }
       }
     },
@@ -126,9 +184,7 @@
       "get": {
         "summary": "Get all courses",
         "responses": {
-          "200": {
-            "description": "Success"
-          }
+          "200": { "description": "Success" }
         }
       },
 
@@ -155,9 +211,7 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          }
+          "201": { "description": "Created" }
         }
       }
     },
@@ -174,9 +228,7 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Success"
-          }
+          "200": { "description": "Success" }
         }
       },
 
@@ -209,9 +261,7 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Updated"
-          }
+          "200": { "description": "Updated" }
         }
       },
 
@@ -226,9 +276,7 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Deleted"
-          }
+          "200": { "description": "Deleted" }
         }
       }
     }
