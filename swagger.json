@@ -51,7 +51,7 @@
       }
     },
 
-    "/students/{id": {
+    "/students/{id}": {
       "get": {
         "summary": "Get one student",
         "parameters": [
