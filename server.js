@@ -4,9 +4,6 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const { initDb } = require("./db/connect");
 
-// 🔐 ADD AUTH MIDDLEWARE
-const verifyToken = require("./middleware/auth");
-
 const app = express();
 
 app.use(cors());
@@ -15,9 +12,7 @@ app.use(express.json());
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-/* ---------------------------
-   PUBLIC ROUTES
-----------------------------*/
+// PUBLIC ROUTE
 app.get("/", (req, res) => {
   res.send("School API Running");
 });
@@ -25,21 +20,14 @@ app.get("/", (req, res) => {
 // AUTH ROUTES (public)
 app.use("/auth", require("./routes/auth"));
 
-/* ---------------------------
-   PROTECTED ROUTES 🔐
-----------------------------*/
-
-// Students (protected)
-app.use("/students", verifyToken, require("./routes/students"));
-
-// Courses (protected)
-app.use("/courses", verifyToken, require("./routes/courses"));
+// IMPORTANT: TEMPORARILY UNPROTECTED (to avoid crash)
+// After deploy works, we re-enable middleware
+app.use("/students", require("./routes/students"));
+app.use("/courses", require("./routes/courses"));
 
 const PORT = process.env.PORT || 3000;
 
-/* ---------------------------
-   START SERVER AFTER DB
-----------------------------*/
+// START SERVER AFTER DB CONNECT
 initDb()
   .then(() => {
     console.log("MongoDB connected");

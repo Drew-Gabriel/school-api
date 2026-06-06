@@ -2,61 +2,37 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { getDb } = require("../db/connect");
 
-// REGISTER
 const register = async (req, res) => {
-  try {
-    const db = getDb();
+  const db = getDb();
 
-    const existingUser = await db.collection("users").findOne({
-      email: req.body.email
-    });
+  const hashed = await bcrypt.hash(req.body.password, 10);
 
-    if (existingUser) {
-      return res.status(400).json("User already exists");
-    }
+  await db.collection("users").insertOne({
+    email: req.body.email,
+    password: hashed
+  });
 
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-    await db.collection("users").insertOne({
-      email: req.body.email,
-      password: hashedPassword
-    });
-
-    res.status(201).json("User created successfully");
-  } catch (err) {
-    res.status(500).json(err.message);
-  }
+  res.status(201).json("User created");
 };
 
-// LOGIN
 const login = async (req, res) => {
-  try {
-    const db = getDb();
+  const db = getDb();
 
-    const user = await db.collection("users").findOne({
-      email: req.body.email
-    });
+  const user = await db.collection("users").findOne({
+    email: req.body.email
+  });
 
-    if (!user) {
-      return res.status(400).json("Invalid email or password");
-    }
+  if (!user) return res.status(400).json("Invalid");
 
-    const isValid = await bcrypt.compare(req.body.password, user.password);
+  const match = await bcrypt.compare(req.body.password, user.password);
 
-    if (!isValid) {
-      return res.status(400).json("Invalid email or password");
-    }
+  if (!match) return res.status(400).json("Invalid");
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      "secretkey",
-      { expiresIn: "1h" }
-    );
+  const token = jwt.sign({ id: user._id }, "secretkey", {
+    expiresIn: "1h"
+  });
 
-    res.json({ token });
-  } catch (err) {
-    res.status(500).json(err.message);
-  }
+  res.json({ token });
 };
 
 module.exports = { register, login };
