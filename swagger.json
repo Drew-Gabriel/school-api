@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
 
-  "host": "school-api.onrender.com",
+  "host": "school-api-88nk.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
 
@@ -30,6 +30,7 @@
     "/auth/register": {
       "post": {
         "summary": "Register user",
+        "security": [],
         "consumes": ["application/json"],
         "parameters": [
           {
@@ -46,9 +47,7 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "User created"
-          }
+          "201": { "description": "User created" }
         }
       }
     },
@@ -56,6 +55,7 @@
     "/auth/login": {
       "post": {
         "summary": "Login user",
+        "security": [],
         "consumes": ["application/json"],
         "parameters": [
           {
@@ -72,9 +72,7 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Returns JWT token"
-          }
+          "200": { "description": "Returns JWT token" }
         }
       }
     },
