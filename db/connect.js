@@ -2,15 +2,12 @@ const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
 
 let database;
+let client;
 
 const initDb = async () => {
-  if (database) {
-    return database;
-  }
+  if (database) return database;
 
-  const client = await MongoClient.connect(
-    process.env.MONGODB_URI
-  );
+  client = await MongoClient.connect(process.env.MONGODB_URI);
 
   database = client.db();
 
@@ -21,11 +18,25 @@ const initDb = async () => {
 
 const getDb = () => {
   if (!database) {
-    throw Error("Database not initialized");
+    throw new Error("Database not initialized");
   }
-
   return database;
 };
+
+// ✅ TEST FIX: mock DB when testing
+if (process.env.NODE_ENV === "test") {
+  database = {
+    collection: () => ({
+      find: () => ({
+        toArray: async () => []
+      }),
+      findOne: async () => null,
+      insertOne: async () => ({ acknowledged: true }),
+      updateOne: async () => ({ modifiedCount: 1 }),
+      deleteOne: async () => ({ deletedCount: 1 })
+    })
+  };
+}
 
 module.exports = {
   initDb,

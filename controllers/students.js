@@ -1,5 +1,6 @@
 const { getDb } = require("../db/connect");
 const { ObjectId } = require("mongodb");
+const studentSchema = require("../validation/studentValidation");
 
 const getAll = async (req, res) => {
   try {
@@ -31,16 +32,36 @@ const getSingle = async (req, res) => {
 
 const createStudent = async (req, res) => {
   try {
+    const { error } = studentSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({
+        message: error.details[0].message
+      });
+    }
+
     const db = getDb();
+
     const result = await db.collection("students").insertOne(req.body);
+
     res.status(201).json(result);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: err.message
+    });
   }
 };
 
 const updateStudent = async (req, res) => {
   try {
+    const { error } = studentSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({
+        message: error.details[0].message
+      });
+    }
+
     const db = getDb();
 
     const result = await db.collection("students").updateOne(
@@ -50,7 +71,9 @@ const updateStudent = async (req, res) => {
 
     res.status(200).json(result);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: err.message
+    });
   }
 };
 

@@ -12,30 +12,31 @@ app.use(express.json());
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// PUBLIC ROUTE
+// Routes
 app.get("/", (req, res) => {
   res.send("School API Running");
 });
 
-// AUTH ROUTES (public)
 app.use("/auth", require("./routes/auth"));
-
-// IMPORTANT: TEMPORARILY UNPROTECTED (to avoid crash)
-// After deploy works, we re-enable middleware
 app.use("/students", require("./routes/students"));
 app.use("/courses", require("./routes/courses"));
+app.use("/instructors", require("./routes/instructors"));
+app.use("/enrollments", require("./routes/enrollments"));
 
 const PORT = process.env.PORT || 3000;
 
-// START SERVER AFTER DB CONNECT
-initDb()
-  .then(() => {
-    console.log("MongoDB connected");
-
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+// Only start server if NOT testing
+if (process.env.NODE_ENV !== "test") {
+  initDb()
+    .then(() => {
+      console.log("MongoDB connected");
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.log("MongoDB Error:", err);
     });
-  })
-  .catch((err) => {
-    console.log("MongoDB Error:", err);
-  });
+}
+
+module.exports = app;
