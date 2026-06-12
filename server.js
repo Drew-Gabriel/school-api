@@ -6,17 +6,23 @@ const { initDb } = require("./db/connect");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 
-// Swagger
+// Swagger Documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Routes
+// Home Route
 app.get("/", (req, res) => {
   res.send("School API Running");
 });
 
+// Routes
 app.use("/auth", require("./routes/auth"));
 app.use("/students", require("./routes/students"));
 app.use("/courses", require("./routes/courses"));
@@ -25,17 +31,19 @@ app.use("/enrollments", require("./routes/enrollments"));
 
 const PORT = process.env.PORT || 3000;
 
-// Only start server if NOT testing
+// IMPORTANT: DO NOT BLOCK SERVER START IF DB FAILS
 if (process.env.NODE_ENV !== "test") {
   initDb()
     .then(() => {
       console.log("MongoDB connected");
+    })
+    .catch((err) => {
+      console.log("MongoDB Error (non-blocking):", err.message);
+    })
+    .finally(() => {
       app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
       });
-    })
-    .catch((err) => {
-      console.log("MongoDB Error:", err);
     });
 }
 
